@@ -42,6 +42,12 @@ client.on("messageCreate", async (message) => {
 // listener for slash commands
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isCommand()) return;
+  if (!interaction.member.permissions.has("MANAGE_ROLES")) {
+    interaction.reply(
+      `You don't have manage roles permissions that are required to execute this command.`
+    );
+    return;
+  }
   // switch that runs the correct code for used command
   switch (interaction.commandName) {
     case "enable": {
