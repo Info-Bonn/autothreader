@@ -16,6 +16,7 @@ const ThreadChannelSchema = new mongoose.Schema({
   channelId: String,
   guildId: String,
   channelMessage: String,
+  naming: String,
 });
 // register the schema
 const ThreadChannel = mongoose.model("ThreadChannel", ThreadChannelSchema);

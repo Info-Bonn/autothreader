@@ -1,6 +1,12 @@
 const { ThreadChannel } = require("../db");
 
-const enable = async (channelName, channelId, guildId, channelMessage) => {
+const enable = async (
+  channelName,
+  channelId,
+  guildId,
+  channelMessage,
+  naming
+) => {
   // look for an existing subscription
   const prevChannel = await ThreadChannel.findOne({
     channelId,
@@ -19,6 +25,7 @@ const enable = async (channelName, channelId, guildId, channelMessage) => {
     channelId,
     guildId,
     channelMessage,
+    naming,
   });
   await channelInstance.save();
 };

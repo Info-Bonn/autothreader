@@ -8,6 +8,15 @@ const command = new SlashCommandBuilder()
 // add the needed options
 command.addStringOption((option) =>
   option
+    .setName("naming")
+    .setDescription("Set the naming scheme!")
+    .setRequired(true)
+    .addChoice("nameanddate", "nameanddate")
+    .addChoice("messagecontent", "messagecontent")
+);
+
+command.addStringOption((option) =>
+  option
     .setName("message")
     .setDescription("The message that will be posted into every new Thread")
 );

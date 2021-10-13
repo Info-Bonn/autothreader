@@ -28,8 +28,22 @@ client.on("messageCreate", async (message) => {
     return;
   }
   const date = new Date(message.createdTimestamp).toString();
+  let threadName;
+  switch (channel.naming) {
+    case "nameanddate":
+      threadName = `${message.author.username}, ${date.slice(0, 15)}`;
+      break;
+    case "messagecontent":
+      threadName = message.content.slice(0, 100);
+      break;
+
+    default:
+      threadName = `${message.author.username}, ${date.slice(0, 15)}`;
+      break;
+  }
+
   const thread = await message.startThread({
-    name: `${message.author.username}, ${date.slice(0, 15)}`,
+    name: threadName,
     autoArchiveDuration: 1440,
   });
   if (channel.channelMessage) {
@@ -55,6 +69,7 @@ client.on("interactionCreate", async (interaction) => {
       await interaction.deferReply({ ephemeral: true });
       let channelMessage = "";
       channelMessage = interaction.options.getString("message");
+      const naming = interaction.options.getString("naming");
       const channelName = interaction.guild.channels.cache.get(
         interaction.channelId
       ).name;
@@ -66,7 +81,8 @@ client.on("interactionCreate", async (interaction) => {
           channelName,
           interaction.channelId,
           interaction.guildId,
-          channelMessage
+          channelMessage,
+          naming
         );
         await interaction.editReply(
           `You successfully enabled autothreading in this channel.`
