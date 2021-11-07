@@ -16,7 +16,8 @@ client.once("ready", () => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (!message.channel.isText() || message.author.bot) {
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  if (!message.channel.isText() || message.author.bot || message.hasThread) {
     return;
   }
 
