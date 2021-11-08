@@ -16,7 +16,6 @@ client.once("ready", () => {
 });
 
 client.on("messageCreate", async (message) => {
-  await new Promise((resolve) => setTimeout(resolve, 100));
   if (!message.channel.isText() || message.author.bot || message.hasThread) {
     return;
   }
@@ -42,16 +41,19 @@ client.on("messageCreate", async (message) => {
       threadName = `${message.author.username}, ${date.slice(0, 15)}`;
       break;
   }
+  try {
+    const thread = await message.startThread({
+      name: threadName,
+      autoArchiveDuration: 1440,
+    });
+    if (channel.channelMessage) {
+      await thread.send(channel.channelMessage);
+    }
 
-  const thread = await message.startThread({
-    name: threadName,
-    autoArchiveDuration: 1440,
-  });
-  if (channel.channelMessage) {
-    await thread.send(channel.channelMessage);
+    await thread.leave();
+  } catch (error) {
+    console.log(error.message);
   }
-
-  await thread.leave();
 });
 
 // listener for slash commands
