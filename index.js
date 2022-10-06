@@ -15,8 +15,16 @@ client.once("ready", () => {
   console.log("Ready!");
 });
 
+// for "docker stop"
+process.on("SIGTERM", () => {
+  client.destroy();
+});
+
 client.on("messageCreate", async (message) => {
   if (!message.channel.isText() || message.author.bot || message.hasThread) {
+    console.log(
+      "Nothing to be done because no text/bot is author/already has thread"
+    );
     return;
   }
 
