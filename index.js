@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, Intents } = require("discord.js");
+const { Client, GatewayIntentBits } = require("discord.js");
 const { enable } = require("./src/commands/enable");
 const { disable } = require("./src/commands/disable");
 const { list } = require("./src/commands/list");
@@ -7,7 +7,11 @@ const { ThreadChannel } = require("./src/db");
 
 // Create a new client instance
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
 });
 
 // When the client is ready, run this code (only once)
@@ -21,7 +25,8 @@ process.on("SIGTERM", () => {
 });
 
 client.on("messageCreate", async (message) => {
-  if (!message.channel.isText() || message.author.bot || message.hasThread) {
+  console.log(message.channel.isThread());
+  if (message.channel.isThread() || message.author.bot || message.hasThread) {
     console.log(
       "Nothing to be done because no text/bot is author/already has thread"
     );
